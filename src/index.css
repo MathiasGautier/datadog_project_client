@@ -5,9 +5,42 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  /* background-color: purple; */
+  /* height:100vh; */
+}
+html{
+  background-color: rgb(248, 244, 244);
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+.navHeight {
+  /* height:15%; */
+}
+.background {
+  background-color: rgba(128, 0, 128, 0.767);
+}
+
+.logo-background{
+  background-color: purple;
+
+}
+
+.main {
+  background-color: rgb(248, 244, 244);
+}
+
+.navbar{
+  color:seashell;
+}
+
+.border_colored{
+ border:2px solid red;
+}
+
+.form{
+  height:500px;
+}
+
+.apiKey{
+  width: 400px;
+box-shadow:none;
 }
