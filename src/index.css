@@ -12,6 +12,26 @@ html{
   background-color: rgb(248, 244, 244);
 }
 
+#root{
+  background-color: rgb(248, 244, 244);
+}
+/* .bg-login{
+  background-color: rgba(194, 189, 194, 0.392);
+} */
+
+/* .box-radius{
+  border-radius: 7px;
+} */
+
+.auth-wrapper {
+  margin: auto;
+  background: #ffffff;
+  box-shadow: 0px 14px 80px rgba(34, 35, 58, 0.2);
+  padding: 40px 55px 45px 55px;
+  border-radius: 15px;
+  transition: all .3s;
+}
+
 .navHeight {
   /* height:15%; */
 }
@@ -43,4 +63,15 @@ html{
 .apiKey{
   width: 400px;
 box-shadow:none;
+}
+
+.bg-apiKey{
+  background-color:#892B64 ;
+}
+.bg-apiKeyBis{
+  background-color: #723C70;
+}
+
+.hoverToSee{
+ color:#723C70;
 }
