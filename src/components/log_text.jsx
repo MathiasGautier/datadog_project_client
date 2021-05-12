@@ -6,41 +6,56 @@ import AuthContext from "../auth/UserContext";
 function Log_text() {
   const authContext = useContext(AuthContext);
   const [text, setText] = useState("");
+  const [jsonStr, setJsonStr] = useState("");
+  const [jsonError, setJsonError] = useState("");
+  const [jsonErrorPosition, setJsonErrorPosition] = useState(null);
   const history = useHistory();
 
-  const textInput = (e) => {
-    setText(e.target.value);
-  };
-  console.log(authContext);
+  //push to login if no user context found
   if (authContext.isLoggedIn === false) {
     history.push("/");
   }
 
-  console.log(authContext.user&&authContext.user.apiKey[0])
-  
-  const validation = (e) => {
-
-
-
-let textRes= JSON.parse(text);
-textRes["ddsource"]="test_your_logs";
-textRes=JSON.stringify(textRes);
-
-console.log(textRes)
-
-    let api=authContext.user.apiKey[0];
-    
-    axios
-      .post(process.env.REACT_APP_BACKEND_URL + "/logs/log", {textRes, api},  {
-        headers: { "content-type": "application/json", withCredentials: true },
-      })
-      .then((res) => {
-        console.log("res", res);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+  //get the text from the input field
+  const textInput = (e) => {
+    setText(e.target.value);
   };
+
+  const validation = (e) => {
+    //JSON Validation
+    try {
+      //try to parse
+      setJsonStr(JSON.parse(text));
+    } catch (e) {
+     // console.log(">>",JSON.parse(text))
+      //if JSON sends an error, get the message and the position
+      console.log(e)
+      setJsonError(JSON.stringify(e.message));
+      let hasNumber = /\d/;
+      if (hasNumber.test(JSON.stringify(e.message)) === true) {
+        setJsonErrorPosition(JSON.stringify(e.message).match(/\d+/)[0]);
+      } else {
+        setJsonErrorPosition(null);
+      }
+    }
+
+    // let api=authContext.user.apiKey[0];
+
+    // axios
+    //   .post(process.env.REACT_APP_BACKEND_URL + "/logs/log", {text, api},  {
+    //     headers: { "content-type": "application/json", withCredentials: true },
+    //   })
+    //   .then((res) => {
+    //     console.log("res", res);
+    //   })
+    //   .catch((error) => {
+    //     console.log(error);
+    //   });
+
+  };
+
+
+
 
   return (
     <div className="container p-4">
@@ -64,6 +79,7 @@ console.log(textRes)
             Validate
           </button>
         </div>
+        {jsonError && jsonError}
       </div>
     </div>
   );

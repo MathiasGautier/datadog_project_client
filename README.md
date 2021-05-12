@@ -1,3 +1,6 @@
+add .env with the following values:
+REACT_APP_BACKEND_URL= <your backend address>
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
