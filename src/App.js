@@ -7,6 +7,7 @@ import Popper from "popper.js";
 import Navbar from "./navbar";
 import MainPage from "./pages/main";
 
+console.log(process.env)
 
 function App() {
   return (

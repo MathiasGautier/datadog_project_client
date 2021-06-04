@@ -1,7 +1,10 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import axios from "axios";
 import { Redirect, useHistory } from "react-router-dom";
 import AuthContext from "../auth/UserContext";
+import Prism from "prismjs";
+import "prismjs/components/prism-json";
+import "../prism.css";
 
 function Log_text() {
   const authContext = useContext(AuthContext);
@@ -10,6 +13,10 @@ function Log_text() {
   const [jsonError, setJsonError] = useState("");
   const [jsonErrorPosition, setJsonErrorPosition] = useState(null);
   const history = useHistory();
+
+  useEffect(() => {
+    Prism.highlightAll();
+  }, [text]);
 
   //push to login if no user context found
   if (authContext.isLoggedIn === false) {
@@ -27,9 +34,9 @@ function Log_text() {
       //try to parse
       setJsonStr(JSON.parse(text));
     } catch (e) {
-     // console.log(">>",JSON.parse(text))
+      // console.log(">>",JSON.parse(text))
       //if JSON sends an error, get the message and the position
-      console.log(e)
+
       setJsonError(JSON.stringify(e.message));
       let hasNumber = /\d/;
       if (hasNumber.test(JSON.stringify(e.message)) === true) {
@@ -51,11 +58,7 @@ function Log_text() {
     //   .catch((error) => {
     //     console.log(error);
     //   });
-
   };
-
-
-
 
   return (
     <div className="container p-4">
@@ -80,6 +83,15 @@ function Log_text() {
           </button>
         </div>
         {jsonError && jsonError}
+
+        <div>
+          <pre
+            className="language-json"
+            data-jsonp="https://api.github.com/repos/leaverou/prism/contents/prism.js"
+          >
+            <code>{text && text}</code>
+          </pre>
+        </div>
       </div>
     </div>
   );
