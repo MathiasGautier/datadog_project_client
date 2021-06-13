@@ -2,10 +2,7 @@ import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Switch, Route } from "react-router-dom";
 import Landing from "./pages/Landing";
-import $ from "jquery";
-import Popper from "popper.js";
-import Navbar from "./navbar";
-import MainPage from "./pages/main";
+import MainPage from "./pages/Main";
 
 console.log(process.env)
 

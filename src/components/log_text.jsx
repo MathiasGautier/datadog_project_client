@@ -1,97 +1,118 @@
-import React, { useState, useContext, useEffect } from "react";
-import axios from "axios";
-import { Redirect, useHistory } from "react-router-dom";
-import AuthContext from "../auth/UserContext";
-import Prism from "prismjs";
-import "prismjs/components/prism-json";
-import "../prism.css";
+import React, { useState, useContext, useEffect, useRef } from "react";
 
-function Log_text() {
+import { useHistory } from "react-router-dom";
+import AuthContext from "../auth/UserContext";
+
+function Log_text({ setJsonStr, setJsonError, setWarning }) {
   const authContext = useContext(AuthContext);
   const [text, setText] = useState("");
-  const [jsonStr, setJsonStr] = useState("");
-  const [jsonError, setJsonError] = useState("");
-  const [jsonErrorPosition, setJsonErrorPosition] = useState(null);
-  const history = useHistory();
 
-  useEffect(() => {
-    Prism.highlightAll();
-  }, [text]);
+  const history = useHistory();
+  let timerID = useRef(null);
 
   //push to login if no user context found
   if (authContext.isLoggedIn === false) {
     history.push("/");
   }
 
+  useEffect(() => {
+    return () => {
+      clearTimeout(timerID);
+    };
+  }, []);
+
   //get the text from the input field
   const textInput = (e) => {
     setText(e.target.value);
   };
 
-  const validation = (e) => {
-    //JSON Validation
-    try {
-      //try to parse
-      setJsonStr(JSON.parse(text));
-    } catch (e) {
-      // console.log(">>",JSON.parse(text))
-      //if JSON sends an error, get the message and the position
+  const clear = (e) => {
+    setText("");
+    setJsonError(null);
+    setJsonStr(null);
+    setWarning(false);
+  };
 
-      setJsonError(JSON.stringify(e.message));
-      let hasNumber = /\d/;
-      if (hasNumber.test(JSON.stringify(e.message)) === true) {
-        setJsonErrorPosition(JSON.stringify(e.message).match(/\d+/)[0]);
-      } else {
-        setJsonErrorPosition(null);
+  useEffect(() => {
+    if (text === "") {
+      setText("");
+    }
+  }, [text]);
+
+  const validation = (e) => {
+    //check if the textbox is empty or not
+    if (text === "") {
+      setJsonError(null);
+      setJsonStr(null);
+      setWarning(true);
+      timerID = setTimeout(() => {
+        setWarning(false);
+      }, 2000);
+    } else {
+      //JSON Validation
+      try {
+        //try to parse
+        setJsonStr(JSON.parse(text));
+        setJsonError(null);
+        setWarning(false);
+      } catch (e) {
+        setJsonError(JSON.stringify(e.message));
+        setJsonStr(null);
+        setWarning(false);
       }
     }
-
-    // let api=authContext.user.apiKey[0];
-
-    // axios
-    //   .post(process.env.REACT_APP_BACKEND_URL + "/logs/log", {text, api},  {
-    //     headers: { "content-type": "application/json", withCredentials: true },
-    //   })
-    //   .then((res) => {
-    //     console.log("res", res);
-    //   })
-    //   .catch((error) => {
-    //     console.log(error);
-    //   });
   };
 
   return (
-    <div className="container p-4">
+    <div className="container pt-4">
       <div className="form-group text-center">
-        <label>Enter you log</label>
-        <div className="textInput">
-          <textarea
-            className="form-control form mt-2"
-            id="exampleFormControlTextarea1"
-            rows="3"
-            type="text"
-            onChange={textInput}
-          ></textarea>
-        </div>
-        <div className="d-grid">
+        <label>Enter you log in JSON format</label>
+
+        <textarea
+          className="form-control form mt-2"
+          id="textarea"
+          rows="3"
+          type="text"
+          value={text}
+          onChange={textInput}
+        ></textarea>
+
+        <div className="row mt-2 container-fluid">
           <button
-            className="btn btn-primary mt-2"
+            className="btn btn-primary col-sm m-1"
             type="button"
             onClick={validation}
           >
-            Validate
+            Validate JSON
+          </button>
+
+          <button
+            className="btn btn-danger col-sm m-1"
+            type="button"
+            onClick={clear}
+          >
+            Clear
           </button>
         </div>
-        {jsonError && jsonError}
 
-        <div>
-          <pre
+        {/* <pre
             className="language-json"
             data-jsonp="https://api.github.com/repos/leaverou/prism/contents/prism.js"
           >
-            <code>{text && text}</code>
-          </pre>
-        </div>
+        {jsonError && jsonError}
+        <code>
+        {
+          jsonError===true?
+          jsonError
+        :
+          text && JSON.stringify(JSON.parse(text), null, "\t")
+        
+        }
+        </code>
+
+         
+            {/* <code>{text && JSON.stringify(JSON.parse(text), null, "\t")}</code> */}
+        {/*   </pre> */}
       </div>
     </div>
   );

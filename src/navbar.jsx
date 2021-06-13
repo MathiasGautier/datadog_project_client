@@ -5,14 +5,10 @@ import { useHistory } from "react-router-dom";
 import AuthContext from "./auth/UserContext";
 
 function Navbar() {
-  const [apiKey, setApikey] = useState("");
-  const [validated, setValidation] = useState(false);
   const [hide, setHide] = useState(true);
 
   const authContext = useContext(AuthContext);
   const history = useHistory();
-
-  const input = (e) => setApikey(e.target.value);
 
   const logoutButton = () => {
     apiHandler.logout().then((data) => {
@@ -32,7 +28,7 @@ function Navbar() {
             </div>
           </div>
           <div className="container">
-            <h4>test_your_logs</h4>
+            <h4>test_your_stuff</h4>
           </div>
         </div>
         {authContext.user && <h4>Hey {authContext.user.username}!</h4>}
