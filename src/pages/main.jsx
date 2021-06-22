@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import LogText from "../components/Log_text";
+import LogText from "../components/Log_text.jsx";
 import Navbar from "../navbar";
 import CodeBox from "../components/CodeBox";
 
@@ -8,7 +8,7 @@ function Main() {
   const [jsonError, setJsonError] = useState(null);
   const [warning, setWarning] = useState(false);
 
-  console.log(warning);
+
 
   return (
     <>

@@ -26,6 +26,16 @@ function Log_text({ setJsonStr, setJsonError, setWarning }) {
     setText(e.target.value);
   };
 
+  //authorize to use tab to indent in the textarea
+  const preventTab=(e)=>{
+    if ( e.key === 'Tab' && !e.shiftKey ) {
+      document.execCommand('insertText', false, "\t");
+      e.preventDefault();
+      return false;
+
+  }
+}
+
   const clear = (e) => {
     setText("");
     setJsonError(null);
@@ -75,6 +85,7 @@ function Log_text({ setJsonStr, setJsonError, setWarning }) {
           type="text"
           value={text}
           onChange={textInput}
+          onKeyDown={preventTab}
         ></textarea>
 
         <div className="row mt-2 container-fluid">

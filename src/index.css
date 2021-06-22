@@ -75,3 +75,7 @@ box-shadow:none;
 .hoverToSee{
  color:#723C70;
 }
+
+.btn-success{
+  background-color: #57c160 !important;
+}
