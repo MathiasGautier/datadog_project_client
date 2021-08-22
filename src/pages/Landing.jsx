@@ -32,7 +32,7 @@ function Landing() {
               </div>
             </div>
             <div className="container">
-              <h4>test_your_logs</h4>
+              <h4>test_your_stuff</h4>
             </div>
           </div>
         </nav>
