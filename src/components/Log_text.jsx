@@ -76,7 +76,7 @@ function Log_text({ setJsonStr, setJsonError, setWarning }) {
   return (
     <div className="container pt-4">
       <div className="form-group text-center">
-        <label>Enter you log in JSON format</label>
+        <label>Enter your log in JSON format</label>
 
         <textarea
           className="form-control form mt-2"
