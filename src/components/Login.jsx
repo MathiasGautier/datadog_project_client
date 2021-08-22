@@ -30,7 +30,6 @@ function Login(props) {
     apiHandler
       .login(user)
       .then((data) => {
-        console.log("data:", data);
         setMessage("yes");
         resetForm();
         timerID = setTimeout(() => {

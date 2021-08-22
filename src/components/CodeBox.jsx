@@ -13,10 +13,6 @@ function CodeBox({ jsonError, jsonStr }) {
 
   let timerID = useRef(null);
 
-  const resetSuccess = () => {
-    setSuccess(false);
-  };
-
   useEffect(() => {
     Prism.highlightAll();
   }, [text]);
@@ -28,7 +24,6 @@ function CodeBox({ jsonError, jsonStr }) {
   }, []);
 
   useEffect(() => {
-    console.log(jsonError, jsonStr);
     if (jsonError === null) {
       setText(JSON.stringify(jsonStr, null, "\t"));
     }
@@ -39,10 +34,14 @@ function CodeBox({ jsonError, jsonStr }) {
 
   const validation = (e) => {
     let api = authContext.user.apiKey[0];
+
+    let logToSend = JSON.parse(text);
+    logToSend.ddsource = "blabla";
+
     axios
       .post(
         process.env.REACT_APP_BACKEND_URL + "/logs/log",
-        { text, api },
+        { logToSend, api },
         {
           headers: {
             "content-type": "application/json",
@@ -52,16 +51,18 @@ function CodeBox({ jsonError, jsonStr }) {
       )
       .then((res) => {
         setSuccess(true);
-        setSuccessText(`Response: ${res.status}/${res.statusText}`);
+        setSuccessText(
+          `Response: ${res.status}/${res.statusText} (inspect your console for more info)`
+        );
         timerID = setTimeout(() => {
           setSuccessText("");
           setSuccess(false);
         }, 2000);
 
-        console.log("res >>>", res);
+        console.log("result:", res);
       })
       .catch((err) => {
-        console.log("error>>>", err);
+        console.log("error:", err);
       });
   };
 

@@ -28,9 +28,7 @@ function Register(props) {
     apiHandler
       .login(user)
       .then((data) => {
-        console.log(data);
         authContext.setUser(data);
-
         history.push("/send_logs");
       })
       .catch((error) => {

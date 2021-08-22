@@ -2,7 +2,7 @@ import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Switch, Route } from "react-router-dom";
 import Landing from "./pages/Landing";
-import MainPage from "./pages/main";
+import MainPage from "./pages/Main.jsx";
 
 console.log(process.env)
 
