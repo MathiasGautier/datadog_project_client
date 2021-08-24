@@ -36,7 +36,7 @@ function CodeBox({ jsonError, jsonStr }) {
     let api = authContext.user.apiKey[0];
 
     let logToSend = JSON.parse(text);
-    logToSend.ddsource = "test_your_stuff";
+    logToSend.ddsource = "test-your-stuff";
 
     axios
       .post(
