@@ -18,7 +18,7 @@ function Landing() {
   const authContext = useContext(AuthContext);
   
     console.log(authContext)
-    if (authContext.isLoggedIn === true) {return <Redirect to="/send_logs" /> }
+    if (authContext.isLoggedIn === true) {return <Redirect to="/send_stuff" /> }
 
 
   return (

@@ -14,11 +14,9 @@ function App() {
     <Route exact path="/" render={(props) => <Landing {...props} />} />
     <Route
           exact
-          path="/send_logs"
+          path="/send_stuff"
           render={(props) => <MainPage {...props} />}
         />
-     {/* <Navbar/>
-     <MainPage/> */}
 
     </Switch>
     </>

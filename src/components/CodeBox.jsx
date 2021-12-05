@@ -10,6 +10,8 @@ function CodeBox({ jsonError, jsonStr }) {
   const [text, setText] = useState(null);
   const [success, setSuccess] = useState(false);
   const [successText, setSuccessText] = useState("");
+  const [failure, setFailure] = useState(false);
+  const [failureText, setFailureText] = useState("");
 
   let timerID = useRef(null);
 
@@ -34,6 +36,7 @@ function CodeBox({ jsonError, jsonStr }) {
 
   const validation = (e) => {
     let api = authContext.user.apiKey[0];
+    let username=authContext.user.username;
 
     let logToSend = JSON.parse(text);
     logToSend.ddsource = "test-your-stuff";
@@ -41,7 +44,7 @@ function CodeBox({ jsonError, jsonStr }) {
     axios
       .post(
         process.env.REACT_APP_BACKEND_URL + "/logs/log",
-        { logToSend, api },
+        { logToSend, api, username },
         {
           headers: {
             "content-type": "application/json",
@@ -62,7 +65,16 @@ function CodeBox({ jsonError, jsonStr }) {
         console.log("result:", res);
       })
       .catch((err) => {
-        console.log("error:", err);
+        setFailure(true);
+        setFailureText(
+          `Failed (have you checked your api key?)`
+        );
+        timerID = setTimeout(() => {
+          setFailureText("");
+          setFailure(false);
+        }, 2000);
+
+    console.log("result:", err, "---");
       });
   };
 
@@ -92,6 +104,16 @@ function CodeBox({ jsonError, jsonStr }) {
                     role="alert"
                   >
                     {successText}
+                  </div>
+                </div>
+              )}
+              {failure && (
+                <div className="d-flex justify-content-center">
+                  <div
+                    className="alert alert-danger w-75 text-center mt-3"
+                    role="alert"
+                  >
+                    {failureText}
                   </div>
                 </div>
               )}

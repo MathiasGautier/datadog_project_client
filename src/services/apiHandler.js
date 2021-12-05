@@ -42,6 +42,28 @@ export default {
       .get("/user/logout")
       .then((res) => res.data)
       .catch(errorHandler);
+  },
+
+  validateApi(apiKey) {
+    return service
+    .post("/user/api", apiKey)
+    .then((res)=>res.data)
+    .catch(errorHandler)
+  },
+
+  updateApiKey(apiKey, id){
+    return service
+    .put(`/user/apiKey/${id}`, apiKey)
+    .then((res)=>res.data)
+    .catch(errorHandler)
+  },
+
+  sendMetric(metricObject){
+    return service
+    .post("/metrics/post_metrics", metricObject)
+    .then((res)=>res.data)
+    .catch(errorHandler)
   }
 
 };
+

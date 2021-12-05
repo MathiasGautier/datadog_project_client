@@ -29,7 +29,7 @@ function Register(props) {
       .login(user)
       .then((data) => {
         authContext.setUser(data);
-        history.push("/send_logs");
+        history.push("/send_stuff");
       })
       .catch((error) => {
         console.log(error);

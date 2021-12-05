@@ -7,6 +7,7 @@ function Log_text({ setJsonStr, setJsonError, setWarning }) {
   const authContext = useContext(AuthContext);
   const [text, setText] = useState("");
 
+
   const history = useHistory();
   let timerID = useRef(null);
 

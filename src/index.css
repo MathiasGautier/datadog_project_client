@@ -23,6 +23,11 @@ html{
   border-radius: 7px;
 } */
 
+.bg-form{
+  background-color: rgba(169, 169, 169, 0.242);
+  border-radius: 14px;
+}
+
 .auth-wrapper {
   margin: auto;
   background: #ffffff;
@@ -32,6 +37,10 @@ html{
   transition: all .3s;
 }
 
+.logPart{
+  width:88em;
+}
+
 .navHeight {
   /* height:15%; */
 }
@@ -39,9 +48,18 @@ html{
   background-color: rgba(128, 0, 128, 0.767);
 }
 
-.logo-background{
+/* .logo-background{
   background-color: purple;
+} */
 
+.sideBar{
+  width: 12em;
+  background-color: purple;
+  height:100vh;
+}
+
+.button-width{
+  width:9em;
 }
 
 .main {

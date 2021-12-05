@@ -35,7 +35,7 @@ function Login(props) {
         timerID = setTimeout(() => {
           authContext.setUser(data);
 
-          history.push("/send_logs");
+          history.push("/send_stuff");
         }, 2000);
       })
       .catch((error) => {
