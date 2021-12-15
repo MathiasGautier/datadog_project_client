@@ -18,6 +18,7 @@ function Metrics() {
   const [tagValue, setNewTagValue] = useState("");
   const [tagKey, setNewTagKey] = useState("");
   const [tagList, setTagsList] = useState("");
+  const [errorMessage, setErrorMessage] = useState(false)
 
   let timerID;
   // let intervalID=useRef(null);
@@ -28,7 +29,6 @@ function Metrics() {
   }, [message]);
 
   const checked = (e) => {
-    // !checkRepeat ? setCheckedRepeat(true), setMetricValue("") : setCheckedRepeat(false);
     if (checkRepeat === false) {
       setCheckedRepeat(true);
       setMetricValue("");
@@ -79,39 +79,66 @@ function Metrics() {
     let username = authContext.user.username;
     let apiKey = authContext.user.apiKey[0];
 
-    if (checkRepeat === false) {
-      let metricObject = {
-        metricName,
-        metricValue,
-        username,
-        apiKey,
-        checkRepeat,
-        tagList
-      };
-      console.log("metricObject", metricObject);
-      apiHandler
-        .sendMetric({ metricObject })
-        .then((data) => {
-          setMetricSent(true);
-          timerID = setTimeout(() => {
-            setMetricSent(false);
-          }, 2000);
-          setMessage(JSON.stringify(JSON.parse(data), null, "\t"));
-          console.log("response", data);
-        })
-        .catch((error) => console.log("error", error));
-    }
 
-    if (checkRepeat === true) {
-      setIsrunning(true);
+    if (checkRepeat === false) {
+      if (metricName === "" || metricValue === "") {
+        setErrorMessage(true);
+        timerID = setTimeout(() => {
+          setErrorMessage(false);
+        }, 2000);
+      } else {
+        let metricObject = {
+          metricName,
+          metricValue,
+          username,
+          apiKey,
+          checkRepeat,
+          tagList,
+        };
+        console.log("metricObject", metricObject);
+        apiHandler
+          .sendMetric({ metricObject })
+          .then((data) => {
+            setMetricSent(true);
+            timerID = setTimeout(() => {
+              setMetricSent(false);
+            }, 2000);
+            setMessage(JSON.stringify(JSON.parse(data), null, "\t"));
+            console.log("response", data);
+          })
+          .catch((error) => console.log("error", error));
+      }
     }
-  };
+    console.log(repeat)
+    if (checkRepeat === true) {
+      if (!metricName || !rendomizeBetweenStart || !rendomizeBetweenEnd || !repeat || Number(repeat) < 3) {
+        setErrorMessage(true);
+        timerID = setTimeout(() => {
+          setErrorMessage(false);
+        }, 2000);
+      } else {
+        setIsrunning(true);
+      }
+    }
+  }
+
+
+
 
   useEffect(() => {
+    Prism.highlightAll();
     let intervalID;
     if (isRunning) {
+      console.log("hiellooo")
       let username = authContext.user.username;
       let apiKey = authContext.user.apiKey[0];
+
+      // if (!metricName || !rendomizeBetweenStart|| !rendomizeBetweenEnd || !repeat) {
+      //   setErrorMessage(true);
+      //   setTimeout(() => {
+      //     setErrorMessage(false);
+      //   }, 1000);
+      // } else {
       intervalID = setInterval(() => {
         function randomInteger(min, max) {
           return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -120,23 +147,34 @@ function Metrics() {
           Number(rendomizeBetweenStart),
           Number(rendomizeBetweenEnd)
         );
-        console.log(value);
+        // console.log(value);
         let metricObject = {
           metricName,
           value,
           username,
           apiKey,
+          tagList,
           checkRepeat,
         };
-        console.log("metricObject Here", metricObject);
+        //console.log("metricObject Here", metricObject);
+
+
+        console.log(metricName, rendomizeBetweenStart, rendomizeBetweenEnd, repeat)
+
+
         apiHandler
           .sendMetric({ metricObject })
           .then((data) => {
+            setMetricSent(true);
+            setTimeout(() => {
+              setMetricSent(false);
+            }, 2000);
             console.log(data);
             setMessage(JSON.stringify(JSON.parse(data), null, "\t"));
             console.log("response", data);
           })
           .catch((error) => console.log("error", error));
+
       }, repeat * 1000);
     }
     return () => clearInterval(intervalID);
@@ -151,10 +189,23 @@ function Metrics() {
     rendomizeBetweenStart,
   ]);
 
-  const clear = () => {
+  const stop = () => {
     console.log("stopped");
     setIsrunning(false);
   };
+
+  const clear = () => {
+    setMetricName("");
+    setMetricValue("");
+    setRepeat("");
+    setrendomizeBetweenStart("");
+    setrendomizeBetweenEnd("");
+    setNewTagValue("");
+    setNewTagKey("");
+    setTagsList("");
+    setIsrunning(false);
+    setMessage(false)
+  }
 
   const setTagKey = (e) => {
     setNewTagKey(e.target.value);
@@ -165,11 +216,10 @@ function Metrics() {
   };
 
   const addTags = (e) => {
-    setTagsList([...tagList, tagValue + ":" + tagKey]);
+    setTagsList([...tagList, tagKey + ":" + tagValue]);
     setNewTagValue("");
     setNewTagKey("");
   };
-
 
   return (
     <div className="container">
@@ -187,7 +237,6 @@ function Metrics() {
               name="Metric_name"
               value={metricName}
               onChange={setMetric}
-              //  className="form-control"
               placeholder="Enter Metric name"
             />
           </div>
@@ -203,7 +252,6 @@ function Metrics() {
                   name="value"
                   value={metricValue}
                   onChange={setValue}
-                  //  className="form-control"
                   placeholder="Enter Metric value"
                 />
               </div>
@@ -219,7 +267,6 @@ function Metrics() {
               name="value"
               value={tagKey}
               onChange={setTagKey}
-              //  className="form-control"
               placeholder="Enter tag key"
             />
 
@@ -228,7 +275,6 @@ function Metrics() {
               name="value"
               value={tagValue}
               onChange={setTagValue}
-              //  className="form-control"
               placeholder="Enter tag value"
             />
             <button
@@ -239,8 +285,11 @@ function Metrics() {
               +
             </button>
           </div>
-          
-          <div>{tagList && tagList.map((x) => x + "  ")}</div>
+
+          {tagList &&
+
+            <div className="alert alert-primary"> <h5>Tags:</h5> {tagList && tagList.map((x) => x + ",  ")}</div>
+          }
 
           <div className="form-check">
             <input
@@ -258,8 +307,6 @@ function Metrics() {
             </label>
           </div>
 
-        
-
           {checkRepeat && (
             <>
               <div className="form-group">
@@ -275,7 +322,7 @@ function Metrics() {
                   //  className="form-control"
                   placeholder="number"
                 />
-                seconds
+                seconds(minimum 3)
               </div>
 
               <div className="form-group">
@@ -307,33 +354,47 @@ function Metrics() {
         </form>
       </div>
 
-      {metricSent ? (
-        <div className="row mt-2 container-fluid">
-          <button className="btn btn-success col-sm m-1" type="button" disabled>
-            🚀 METRIC SENT! 🚀
-          </button>
-        </div>
-      ) : (
-        <div className="row mt-2 container-fluid">
-          <button
-            className="btn btn-primary col-sm m-1"
-            type="button"
-            onClick={sendMetric}
-          >
-            Send
-          </button>
+      <div className="row mt-2 container-fluid ms-3">
 
+
+
+
+        {!errorMessage && !isRunning && (
+          <div className="row mt-2 container-fluid ">
+            <button
+              className="btn btn-primary col-sm m-1"
+              type="button"
+              onClick={sendMetric}
+            >
+              Send
+            </button>
+
+            <button
+              className="btn btn-warning col-sm m-1"
+              type="button"
+              onClick={clear}
+            >
+              Clear
+            </button>
+          </div>
+        )}
+
+        {checkRepeat &&
+          isRunning &&
           <button
             className="btn btn-danger col-sm m-1"
             type="button"
-            onClick={clear}
+            onClick={stop}
           >
             stop
           </button>
-        </div>
-      )}
+        }
+
+      </div>
+
 
       {message && (
+
         <>
           <pre
             className="language-json"
@@ -342,7 +403,24 @@ function Metrics() {
             <code>{message}</code>
           </pre>
         </>
+
       )}
+
+      {metricSent &&
+        <>
+          <div className="alert alert-success text-center" type="button" disabled>
+            🚀 METRIC SENT! 🚀
+          </div>
+        </>
+      }
+
+      {errorMessage &&
+
+        <div className="alert alert-danger text-center">
+          Please check that all the fields are correctly filled and validate your API key
+        </div>
+      }
+
     </div>
   );
 }

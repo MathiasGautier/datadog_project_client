@@ -63,6 +63,13 @@ export default {
     .post("/metrics/post_metrics", metricObject)
     .then((res)=>res.data)
     .catch(errorHandler)
+  },
+
+  sendEvent(eventObject){
+    return service
+    .post("/logs/post_event", eventObject)
+    .then((res)=>res.data)
+    .catch(errorHandler)
   }
 
 };

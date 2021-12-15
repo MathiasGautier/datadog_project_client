@@ -4,12 +4,15 @@ import Navbar from "../navbar";
 import Sidebar from "../components/Sidebar.jsx";
 import CodeBox from "../components/CodeBox";
 import Metrics from "../components/Metrics.jsx";
+import Events from "../components/Events.jsx"
 
 function Main() {
   const [jsonStr, setJsonStr] = useState(null);
   const [jsonError, setJsonError] = useState(null);
   const [warning, setWarning] = useState(false);
   const [isLog, setIsLog] = useState(true);
+  const [isMetrics, setIsMetrics] = useState(false)
+  const [isEvents, setIsEvents] = useState(false)
 
   return (
     <>
@@ -17,7 +20,7 @@ function Main() {
 
       <div className="main">
         <div className="d-flex">
-          <Sidebar isLog={isLog} setIsLog={setIsLog} />
+          <Sidebar isLog={isLog} setIsLog={setIsLog} isMetrics={isMetrics} setIsMetrics={setIsMetrics} isEvents={isEvents} setIsEvents={setIsEvents} />
 
           {isLog === true && (
             <div className="flex-column logPart">
@@ -44,9 +47,15 @@ function Main() {
               <CodeBox jsonStr={jsonStr} jsonError={jsonError} />
             </div>
           )}
-          {isLog === false && (
+          {isMetrics && (
             <>
               <Metrics />
+            </>
+          )}
+
+          {isEvents && (
+            <>
+              <Events />
             </>
           )}
         </div>
