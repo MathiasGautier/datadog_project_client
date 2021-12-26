@@ -21,7 +21,6 @@ function Metrics() {
   const [errorMessage, setErrorMessage] = useState(false)
 
   let timerID;
-  // let intervalID=useRef(null);
   const authContext = useContext(AuthContext);
 
   useEffect(() => {
@@ -133,30 +132,46 @@ function Metrics() {
       let username = authContext.user.username;
       let apiKey = authContext.user.apiKey[0];
 
-      // if (!metricName || !rendomizeBetweenStart|| !rendomizeBetweenEnd || !repeat) {
-      //   setErrorMessage(true);
-      //   setTimeout(() => {
-      //     setErrorMessage(false);
-      //   }, 1000);
-      // } else {
+      function randomInteger(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+      }
+
+      let value = randomInteger(
+        Number(rendomizeBetweenStart),
+        Number(rendomizeBetweenEnd)
+      );
+
+      let metricObject = {
+        metricName,
+        value,
+        username,
+        apiKey,
+        tagList,
+        checkRepeat,
+      };
+
+      apiHandler
+        .sendMetric({ metricObject })
+        .then((data) => {
+          setMetricSent(true);
+          setTimeout(() => {
+            setMetricSent(false);
+          }, 2000);
+          console.log(data);
+          setMessage(JSON.stringify(JSON.parse(data), null, "\t"));
+          console.log("response", data);
+        })
+        .catch((error) => console.log("error", error));
+
+
       intervalID = setInterval(() => {
-        function randomInteger(min, max) {
+        function randomInteger_bis(min, max) {
           return Math.floor(Math.random() * (max - min + 1)) + min;
         }
-        let value = randomInteger(
+        metricObject.value = randomInteger_bis(
           Number(rendomizeBetweenStart),
           Number(rendomizeBetweenEnd)
         );
-        // console.log(value);
-        let metricObject = {
-          metricName,
-          value,
-          username,
-          apiKey,
-          tagList,
-          checkRepeat,
-        };
-        //console.log("metricObject Here", metricObject);
 
 
         console.log(metricName, rendomizeBetweenStart, rendomizeBetweenEnd, repeat)
