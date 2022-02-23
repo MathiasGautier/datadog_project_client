@@ -8,6 +8,7 @@ import Prism from "prismjs";
 function Metrics() {
   const [metricName, setMetricName] = useState("");
   const [metricValue, setMetricValue] = useState("");
+  const [metricTimestamp, setMetricTimestamp] = useState("")
   const [repeat, setRepeat] = useState("");
   const [rendomizeBetweenStart, setrendomizeBetweenStart] = useState("");
   const [rendomizeBetweenEnd, setrendomizeBetweenEnd] = useState("");
@@ -50,6 +51,14 @@ function Metrics() {
     }
   };
 
+  const setTimestamp = (e) => {
+    if (checkRepeat === false) {
+      setMetricTimestamp(e.target.value);
+    }
+  }
+
+
+
   const repeatSend = (e) => {
     if (checkRepeat === true) {
       setRepeat(e.target.value);
@@ -74,6 +83,7 @@ function Metrics() {
     }
   };
 
+
   const sendMetric = (e) => {
     let username = authContext.user.username;
     let apiKey = authContext.user.apiKey[0];
@@ -85,7 +95,19 @@ function Metrics() {
         timerID = setTimeout(() => {
           setErrorMessage(false);
         }, 2000);
-      } else {
+        console.log("Metric name or value empty")
+      }
+
+      if (metricTimestamp.length > 0 && metricTimestamp.length !== 10) {
+        setErrorMessage(true);
+        timerID = setTimeout(() => {
+          setErrorMessage(false);
+        }, 2000);
+        console.log("timestamp not valid")
+      }
+
+      else {
+
         let metricObject = {
           metricName,
           metricValue,
@@ -93,6 +115,7 @@ function Metrics() {
           apiKey,
           checkRepeat,
           tagList,
+          metricTimestamp
         };
         console.log("metricObject", metricObject);
         apiHandler
@@ -268,6 +291,18 @@ function Metrics() {
                   value={metricValue}
                   onChange={setValue}
                   placeholder="Enter Metric value"
+                />
+              </div>
+              <div className="form-group">
+                <label htmlFor="username" className="me-1 mb-4">
+                  Unix Timestamp (optionnal) :
+                </label>
+                <input
+                  type="number"
+                  name="value"
+                  value={metricTimestamp}
+                  onChange={setTimestamp}
+                  placeholder="Timestamp in ms"
                 />
               </div>
             </>

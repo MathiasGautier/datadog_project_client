@@ -24,7 +24,7 @@ datadogRum.init({
 //datadogRum.startSessionReplayRecording();
 
 datadogLogs.init({
-  clientToken: 'pub7bdeedb11ec507b756025e62aa459d19',
+  clientToken: 'pubced77c9b02b3b9184bafde0d72e4be71',
   site: 'datadoghq.com',
   forwardErrorsToLogs: true,
   sampleRate: 100,

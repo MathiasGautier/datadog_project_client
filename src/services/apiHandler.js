@@ -2,8 +2,9 @@ import axios from "axios";
 
 const service = axios.create({
   baseURL: process.env.REACT_APP_BACKEND_URL,
- withCredentials: true,
+  withCredentials: true,
 });
+
 
 function errorHandler(error) {
   if (error.response.data) {
@@ -46,30 +47,30 @@ export default {
 
   validateApi(apiKey) {
     return service
-    .post("/user/api", apiKey)
-    .then((res)=>res.data)
-    .catch(errorHandler)
+      .post("/user/api", apiKey)
+      .then((res) => res.data)
+      .catch(errorHandler)
   },
 
-  updateApiKey(apiKey, id){
+  updateApiKey(apiKey, id) {
     return service
-    .put(`/user/apiKey/${id}`, apiKey)
-    .then((res)=>res.data)
-    .catch(errorHandler)
+      .put(`/user/apiKey/${id}`, apiKey)
+      .then((res) => res.data)
+      .catch(errorHandler)
   },
 
-  sendMetric(metricObject){
+  sendMetric(metricObject) {
     return service
-    .post("/metrics/post_metrics", metricObject)
-    .then((res)=>res.data)
-    .catch(errorHandler)
+      .post("/metrics/post_metrics", metricObject)
+      .then((res) => res.data)
+      .catch(errorHandler)
   },
 
-  sendEvent(eventObject){
+  sendEvent(eventObject) {
     return service
-    .post("/logs/post_event", eventObject)
-    .then((res)=>res.data)
-    .catch(errorHandler)
+      .post("/logs/post_event", eventObject)
+      .then((res) => res.data)
+      .catch(errorHandler)
   }
 
 };
