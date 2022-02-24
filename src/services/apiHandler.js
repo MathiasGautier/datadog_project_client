@@ -71,6 +71,13 @@ export default {
       .post("/logs/post_event", eventObject)
       .then((res) => res.data)
       .catch(errorHandler)
+  },
+
+  sendSimpleText(logObject) {
+    return service
+      .post("/logs/post_simple_log", logObject)
+      .then((res) => res.data)
+      .catch(errorHandler)
   }
 
 };
