@@ -12,7 +12,7 @@ datadogRum.init({
     clientToken: 'pubced77c9b02b3b9184bafde0d72e4be71',
     site: 'datadoghq.com',
     service:'test_your_stuff',
-    env:'local_macbook_math',
+    env:'math_ec2',
     // Specify a version number to identify the deployed version of your application in Datadog 
     // version: '1.0.0',
     sampleRate: 100,
@@ -28,7 +28,7 @@ datadogLogs.init({
   site: 'datadoghq.com',
   forwardErrorsToLogs: true,
   sampleRate: 100,
-  env: "local_macbook_math",
+  env: "math_ec2",
   service:"test_your_stuff",
   silentMultipleInit:false
 })
